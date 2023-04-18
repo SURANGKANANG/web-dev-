@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <div id="maincontainer"></div>
+        <script>
+            //getid
+            let mainContainer = document.getElementById("maincontainer")
+            //head ex4 
+            const headex4 = document.createElement("div");
+            headex4.innerHTML = "<h2>Exercise 04: JavaScript&DOM</h2>";
+            mainContainer.appendChild(headex4);
+
+            //button 
+            let divButton = document.createElement("div");
+            let button = document.createElement("button");
+            button.innerHTML = "Click me to display Date and Time";
+            divButton.style.height = "50px";
+            divButton.style.display = "flex";
+            button.style.width = "fit-content";
+            button.style.height = "fit-content";
+            button.style.alignSelf = "center";
+            divButton.appendChild(button);
+            mainContainer.appendChild(divButton);
+
+            let showDate = document.createElement("div");
+            showDate.innerHTML = new Date();
+            showDate.style.border = "3px solid black";
+            showDate.style.width = "fit-content";
+            showDate.style.height = "fit-content";
+            showDate.style.alignSelf = "center";
+            showDate.style.position = "fixed";
+            showDate.style.top = "0";
+            showDate.style.right = "0";
+            showDate.style.display = "none";
+            divButton.appendChild(showDate);
+
+            let colorList = ['#FCF19D', '#ACFC9D', '#CF1111', '#ABCFF3', '#D8AFFC', '#FCAFED'];
+            let backgroundIndex = 0;
+            let textIndex = 2;
+            showDate.style.backgroundColor = colorList[0];
+            let changeColor = () =>{
+                backgroundIndex = (backgroundIndex + 1)%colorList.length;
+                textIndex = (textIndex+1)%colorList.length;
+                showDate.style.backgroundColor = colorList[backgroundIndex];
+                showDate.style.color = colorList[textIndex];
+            };
+            //worker
+            let webWorker = null;
+
+            button.onclick = () => {
+                button.style.display = "none";
+                showDate.style.display = "block";
+                
+                webWorker = new Worker("64010936.js");
+                webWorker.onmessage = (e) => {
+                    showDate.innerHTML = e.data;
+                    changeColor();
+                };
+            };
+            
+            showDate.onclick = () => {
+                if(showDate.style.position == "fixed"){
+                    webWorker.terminate();
+                    showDate.style.position = "relative";
+                }
+                else{
+                    changeColor();
+                    showDate.style.position = "fixed";
+                    webWorker = new Worker("64010936.js");
+                    webWorker.onmessage = (e) => {
+                        showDate.innerHTML = e.data;
+                        changeColor();
+                    };
+                }
+            };
+            let divPersonalInfo = document.createElement("div");
+            let PersonalInfo = document.createElement("per");
+            PersonalInfo.innerHTML = "Personal Info";
+            
+            PersonalInfo.setAttribute("href", "#");
+            divPersonalInfo.appendChild(PersonalInfo);
+            mainContainer.appendChild(divPersonalInfo);
+
+            PersonalInfo.onmouseover = () => {
+                PersonalInfo.style.color = "blue";
+                PersonalInfo.style.backgroundColor = "yellow";
+            };
+
+            PersonalInfo.onmouseout = () =>{
+                PersonalInfo.style.color = "hotpink";
+                PersonalInfo.style.backgroundColor = "white";
+            };
+            //sub Personal info
+            let divMyInfo = document.createElement("div");
+            let unOrder = document.createElement("ul");
+            let name = document.createElement("li");
+            name.innerHTML = "Surangkanang Ketyangyuenwong, ID:64010936";
+            unOrder.appendChild(name);
+            let subject = document.createElement("li");
+            subject.innerHTML = "Subject:WEB APPLICATION DEVELOPMENT";
+            unOrder.appendChild(subject);
+            let semester = document.createElement("li");
+            semester.innerHTML = "Semester:2";
+            unOrder.appendChild(semester);
+            divMyInfo.hidden = true;
+            divMyInfo.appendChild(unOrder);
+            mainContainer.appendChild(divMyInfo);
+
+            PersonalInfo.onclick = () => {
+                divMyInfo.hidden = !divMyInfo.hidden;
+            };
+            
+            let h1 = document.createElement("h1");
+            h1.innerHTML = "Snapshots";
+            mainContainer.appendChild(h1);
+
+            let snapList = [
+            ["Fireworks","https://www.ontariosciencecentre.ca/media/2098/fireworksheader3.jpg"],
+            ["Crest","https://sgp1.vultrobjects.com/img-in-th/UBzIZD.jpeg"],
+            ["Action","https://miro.medium.com/max/1000/1*HyxHJfTqBvwa6DIei8DHLg.png"],
+            ["Buffalo","https://wildart.org.za/wp-content/uploads/2016/04/ANM00002-African-Buffalo.jpg"]
+            ];
+
+            let snUL = document.createElement("ul");
+            mainContainer.appendChild(snUL);
+
+            let img = document.createElement("img");
+            img.setAttribute("src", "https://upload.wikimedia.org/wikipedia/commons/4/4e/Kmitl.jpg");
+            mainContainer.appendChild(img);
+
+            for(let i = 0; i < snapList.length; i+=1){
+                let snapItem = document.createElement("li");
+                snUL.appendChild(snapItem);
+
+                let link = document.createElement("a");
+                link.innerHTML = snapList[i][0];
+                link.href = "#";
+                link.onclick = () =>{
+                    img.src=snapList[i][1];
+                };
+                snapItem.appendChild(link);
+            }
+
+        </script>
+    </body>
+</html>
